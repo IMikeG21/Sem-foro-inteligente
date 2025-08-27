@@ -1,0 +1,50 @@
++++++++Creación de la tabla "intersecciones"+++++++
+CREATE TABLE IF NOT EXISTS public.intersecciones
+(
+    id_interseccion integer NOT NULL,
+    ubicacion character varying(35) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT intersecciones_pkey PRIMARY KEY (id_interseccion)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.intersecciones
+    OWNER to "Ciberm";
+
++++++++Creación de la tabla "semaforos"+++++++
+CREATE TABLE IF NOT EXISTS public."Semaforos"
+(
+    id_semaforo integer NOT NULL,
+    estado_actual character varying(35) COLLATE pg_catalog."default" NOT NULL,
+    id_interseccion integer,
+    CONSTRAINT "Semaforos_pkey" PRIMARY KEY (id_semaforo),
+    CONSTRAINT "Semaforos_id_interseccion_fkey" FOREIGN KEY (id_interseccion)
+        REFERENCES public.intersecciones (id_interseccion) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."Semaforos"
+    OWNER to "Ciberm";
+
+++++++++Creación de la tabla "sensores"+++++++
+CREATE TABLE IF NOT EXISTS public.sensores
+(
+    id_sensor integer NOT NULL,
+    fecha_hora date DEFAULT CURRENT_DATE,
+    conteo_autos integer NOT NULL,
+    id_carril integer NOT NULL,
+    id_interseccion integer,
+    CONSTRAINT sensores_pkey PRIMARY KEY (id_sensor),
+    CONSTRAINT sensores_id_interseccion_fkey FOREIGN KEY (id_interseccion)
+        REFERENCES public.intersecciones (id_interseccion) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.sensores
+    OWNER to "Ciberm";
